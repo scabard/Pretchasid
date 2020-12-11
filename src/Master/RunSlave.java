@@ -9,7 +9,7 @@ public class RunSlave implements Runnable {
     public RunSlave(String inpname, String inpserverPort ) {
         name = inpname;
         serverPort = inpserverPort;
-    }
+    }                                           
 
     public void run() {
         String[] command = new String[] {"java", "Slave",serverPort,name};

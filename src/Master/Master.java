@@ -6,6 +6,7 @@ public class Master {
     public static int cPort;
     public static int sPort;
     public static HashMap<String, Object> clientInfo;
+    public static HashMap<String, Object> slaveInfo;
 
     public static void main(String[] args) {
 
@@ -14,6 +15,7 @@ public class Master {
         ServerSocket cSock, sSock;
         Thread th;
         clientInfo = new HashMap<String, Object>();
+        slaveInfo = new HashMap<String, Object>();
             
         try {
             cSock = new ServerSocket(0);
@@ -26,7 +28,10 @@ public class Master {
 
             ClientListener cL = new ClientListener(cSock);
             th = new Thread(cL);
+            th.start();
 
+            SlaveListener sL = new SlaveListener(sSock);
+            th = new Thread(sL);
             th.start();
 
             // RunSlave slave;
@@ -53,5 +58,10 @@ public class Master {
     public static synchronized void addClient( String name, ClientInfo cInfo ) {
         clientInfo.put(name, cInfo);
         System.out.println("Registered Client " + name);
+    }
+
+    public static synchronized void addSlave( String name, SlaveInfo sInfo ) {
+        slaveInfo.put(name, sInfo);
+        System.out.println("Registered Slave " + name);
     }
 }

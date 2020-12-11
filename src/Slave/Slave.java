@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import org.json.JSONObject;
+import org.json.XML;
 
 public class Slave {
     public static void main(String[] args) {
@@ -11,6 +13,12 @@ public class Slave {
         Socket s;
         DataInputStream ipServer;
         DataOutputStream opServer;
+
+        JSONObject msgJSON = new JSONObject();
+        msgJSON.put("ty","r");
+        msgJSON.put("name",name);
+        msg = XML.toString(msgJSON);
+
         try{
             ip = InetAddress.getByName("localhost"); 
             
@@ -19,17 +27,7 @@ public class Slave {
             ipServer = new DataInputStream(s.getInputStream()); 
             opServer = new DataOutputStream(s.getOutputStream()); 
         
-  
-            msg = (new String("s")).concat(name); 
             opServer.writeUTF(msg);
-            msg = ipServer.readUTF();
-            if (msg == "successful") {
-                System.out.println("Successfully Registered");
-            }
-            else {
-                System.out.println("Not Registered");
-                System.exit(0);
-            }
 
             while(true) {
                 msg = ipServer.readUTF();

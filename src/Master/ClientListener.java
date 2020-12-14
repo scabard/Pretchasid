@@ -51,9 +51,25 @@ class ClientHandler implements Runnable {
 
     public void run() {
         register();
-        while(reg) {
+        String msg;
+        try {
+            while(reg) {
+                msg = dis.readUTF();
 
+                if (msg.equals("1")) {
+                    Util.addWork(name);
+                } else if (msg.equals("2")) {
+                    reg = false;
+                    dis.close();
+                    cSock.close();
+                    cSock.close();
+                    System.out.println("Client " + name + "exiting...");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     void register() {
@@ -66,7 +82,7 @@ class ClientHandler implements Runnable {
                 if(msgType.equals("r")) {
                     name = recvJSON.getString("name");
                     ClientInfo cInfo = new ClientInfo( cSock, name, dis, dos );
-                    Master.addClient(name, cInfo);
+                    Util.addClient(name, cInfo);
                     reg = true;
                 }
             }

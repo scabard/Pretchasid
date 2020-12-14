@@ -66,7 +66,7 @@ class SlaveHandler implements Runnable {
                 if(msgType.equals("r")) {
                     name = recvJSON.getString("name");
                     SlaveInfo sInfo = new SlaveInfo( sSock, name, dis, dos );
-                    Master.addSlave(name, sInfo);
+                    Util.addSlave(name, sInfo);
                     reg = true;
                 }
             }

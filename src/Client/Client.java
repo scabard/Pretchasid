@@ -41,8 +41,21 @@ public class Client {
             t.start();
 
             while(true) {
+                System.out.println("1. Request Work\n2. Exit\n");
+                msg = sc.nextLine();
 
+                if (msg.equals("1")) {
+                    opServer.writeUTF(msg);
+                } else if (msg.equals("2")) {
+                    System.out.println("Exiting...");
+                    opServer.writeUTF(msg);
+                    s.close();
+                    t.interrupt();
+                } else {
+                    System.out.println("Invalid response.");
+                }
             }
+
         } catch( UnknownHostException e ){
             e.printStackTrace();
             System.exit(0);

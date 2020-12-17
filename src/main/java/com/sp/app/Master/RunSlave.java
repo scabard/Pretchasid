@@ -1,3 +1,5 @@
+package com.sp.app.Master;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -9,15 +11,15 @@ public class RunSlave implements Runnable {
     public RunSlave(String inpname, String inpserverPort ) {
         name = inpname;
         serverPort = inpserverPort;
-    }                                           
+    }
 
     public void run() {
         String[] command = new String[] {"java", "Slave",serverPort,name};
         ProcessBuilder builder = new ProcessBuilder(command);
         Process process;
-        try { 
+        try {
             process = builder.start();
-        
+
             OutputStream stdin = process.getOutputStream();
             InputStream stdout = process.getInputStream();
             InputStream stderr = process.getErrorStream();
@@ -33,7 +35,7 @@ public class RunSlave implements Runnable {
         catch ( IOException e ) {
             e.printStackTrace();
         }
-        
-        
+
+
     }
 }

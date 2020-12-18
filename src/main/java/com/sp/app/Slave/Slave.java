@@ -7,6 +7,11 @@ import org.json.JSONObject;
 import org.json.XML;
 
 public class Slave {
+    static String currIP;
+    static int currPort;
+    static DataInputStream disServer;
+    static DataOutputStream dosServer;
+
     public static void main(String[] args) {
         int serverPort = Integer.parseInt(args[0]);
         String name = args[1];
@@ -15,20 +20,31 @@ public class Slave {
         Socket s;
         DataInputStream ipServer;
         DataOutputStream opServer;
+        ServerSocket sock;
 
         JSONObject msgJSON = new JSONObject();
         msgJSON.put("ty","r");
         msgJSON.put("name",name);
-        msg = XML.toString(msgJSON);
-
+        
         try{
-            ip = InetAddress.getByName("localhost");
-
+            ip = InetAddress.getByName("localhost"); 
+            
             s = new Socket(ip, serverPort);
+            
+            disServer = ipServer = new DataInputStream(s.getInputStream()); 
+            dosServer = opServer = new DataOutputStream(s.getOutputStream()); 
+            currIP = s.getLocalAddress().getHostAddress();
+            msgJSON.put("ip",currIP);
 
-            ipServer = new DataInputStream(s.getInputStream());
-            opServer = new DataOutputStream(s.getOutputStream());
+            sock = new ServerSocket(0);
+            currPort = sock.getLocalPort();
+            msgJSON.put("port",currPort);
 
+            TaskListener tL = new TaskListener(sock);
+            Thread th = new Thread(tL);
+            th.start();
+
+            msg = XML.toString(msgJSON);
             opServer.writeUTF(msg);
 
             while(true) {
@@ -40,7 +56,7 @@ public class Slave {
         } catch( UnknownHostException e ){
             e.printStackTrace();
             System.exit(0);
-        } catch (IOException e) {
+        } catch (IOException e) { 
             e.printStackTrace();
             System.exit(0);
         }
@@ -52,21 +68,21 @@ class PerformTask implements Runnable
     DataOutputStream opServer;
     String msg;
 
-    public PerformTask(DataOutputStream opS, String ms)
+    public PerformTask(DataOutputStream opS, String ms) 
     {
         opServer = opS;
         msg = ms;
     }
 
-    public void run()
+    public void run() 
     {
         try {
             Thread.sleep(5000);
             System.out.println(msg);
             opServer.writeUTF("done");
-        } catch( InterruptedException e ) {
+        } catch( InterruptedException e ) { 
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException e) { 
             e.printStackTrace();
         }
     }

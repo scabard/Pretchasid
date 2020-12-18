@@ -12,9 +12,9 @@ public class Scheduler implements Runnable{
         try {
             JSONObject msgJSON = new JSONObject();
             msgJSON.put("type","work");
-            msgJSON.put("name",c.name);
-            msgJSON.put("dos",c.dos);
-            msgJSON.put("dis",c.dis);
+            msgJSON.put("name",s.name);
+            msgJSON.put("ip",s.ip);
+            msgJSON.put("port",s.port);
             String msg = XML.toString(msgJSON);
 
             c.dos.writeUTF(msg);

@@ -57,10 +57,11 @@ class ClientHandler implements Runnable {
         try {
             while(reg) {
                 msg = dis.readUTF();
-
-                if (msg.equals("1")) {
+                JSONObject recvJSON = XML.toJSONObject(msg);
+                String msgType = recvJSON.getString("type");
+                if (msgType.equals("req")) {
                     Util.addWork(name);
-                } else if (msg.equals("2")) {
+                } else if (msg.equals("exit")) {
                     reg = false;
                     dis.close();
                     cSock.close();

@@ -5,6 +5,7 @@ import java.io.*;
 import java.util.*;
 import org.json.JSONObject;
 import org.json.XML;
+import org.json.JSONTokener;
 
 public class Client {
     static boolean requested;
@@ -51,8 +52,22 @@ public class Client {
 
                 if (res.equals("1")) {
                     JSONObject obj = new JSONObject();
-                    System.out.print("Enter file name: ");
-                    String file = sc.nextLine();
+                    System.out.print("Enter config file name: ");
+                    String configFile = sc.nextLine();
+
+                    BufferedReader reader = new BufferedReader(new FileReader(configFile));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    char[] buffer = new char[10];
+                    while (reader.read(buffer) != -1) {
+                        stringBuilder.append(new String(buffer));
+                        buffer = new char[10];
+                    }
+                    reader.close();
+
+                    String configContent = stringBuilder.toString();
+                    JSONObject config = new JSONObject(configContent);
+
+                    String file = config.getString("file");
                     File fileP = new File(file);
                     if(fileP == null) {
                         continue;
@@ -64,12 +79,17 @@ public class Client {
                     msg = XML.toString(obj);
                     opServer.writeUTF(msg);
 
-                    TaskInfo task = new TaskInfo( file, fis, fileL );
+                    TaskInfo task = new TaskInfo( config, fis, fileL );
                     putTask( task );
 
                     request(true);
-                    while(isRequested()) {
-
+                    try {
+                        while(isRequested()) {
+                            Thread.sleep(1000);
+                        }
+                    }catch (InterruptedException e) {
+                        e.printStackTrace();
+                        System.exit(0);
                     }
                 } else if (res.equals("2")) {
                     JSONObject obj = new JSONObject();
@@ -136,11 +156,10 @@ class ListenServer implements Runnable
                 DataOutputStream dosTask = new DataOutputStream(s.getOutputStream()); 
                 TaskInfo task = Client.getTask();
                 
-                JSONObject obj = new JSONObject();
-                obj.put("type","work");
-                obj.put("file",task.fileName);
-                obj.put("length",task.fileL);
-                String msgS = XML.toString(obj);
+                task.config.put("type","work");
+                task.config.put("file","test.zip");
+                task.config.put("length",task.fileL);
+                String msgS = XML.toString(task.config);
                 dosTask.writeUTF(msgS);
 
                 msg = disTask.readUTF();
@@ -152,7 +171,7 @@ class ListenServer implements Runnable
                 BufferedInputStream bis = new BufferedInputStream(task.fis);
                 long size = 0;
                 while (size < task.fileL) {
-                    long fSize = 10000;
+                    long fSize = 5000;
                     if(fSize + size <= task.fileL) {
                         size+=fSize;
                     }

@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import org.json.JSONObject;
 import org.json.XML;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 
 public class TaskListener implements Runnable {
     ServerSocket sock;
@@ -49,6 +51,8 @@ class TaskHandler implements Runnable {
     DataOutputStream dos;
     String file;
     long fileL;
+    String cmd;
+    String image;
 
     public TaskHandler( Socket inpcSock, DataInputStream inpdis, DataOutputStream inpdos ) {
         cSock = inpcSock;
@@ -59,7 +63,15 @@ class TaskHandler implements Runnable {
     public void run() {
         config();
         recvFile();
-
+        try {
+            unzipFile();
+            DockerUtil docker = new DockerUtil();
+            docker.imgHandler(image);
+            docker.containerHandler(image, cmd);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void config() {
@@ -71,7 +83,10 @@ class TaskHandler implements Runnable {
             if(msgType.equals("work")) {
                 file = recvJSON.getString("file");
                 fileL = recvJSON.getLong("length");
-
+                cmd = recvJSON.getString("cmd");
+                image = recvJSON.getString("image");
+                
+                System.out.println("Request Received");
                 dos.writeUTF("accept");
             }
             else {
@@ -98,5 +113,42 @@ class TaskHandler implements Runnable {
         } catch ( Exception e ) {
             e.printStackTrace();
         }
+    }
+
+    void unzipFile() throws Exception {
+        byte[] buffer = new byte[4096];
+        
+        File zipFile = new File(file);
+        ZipFile zf = new ZipFile(zipFile);
+
+        Enumeration<ZipArchiveEntry> entries = zf.getEntries();
+
+        while(entries.hasMoreElements())
+        {
+            ZipArchiveEntry ze = entries.nextElement();
+            String zefilename = ze.getName();
+            String dir = "data/";
+
+            File extfile = new File(dir.concat(zefilename));
+
+            if (ze.isDirectory()) {
+                extfile.mkdirs();
+            } else {
+                extfile.getParentFile().mkdirs();
+                InputStream zis = zf.getInputStream(ze);
+                FileOutputStream fos = new FileOutputStream(extfile);
+                try {
+                    int numBytes;
+                    while ((numBytes = zis.read(buffer, 0, buffer.length)) != -1)
+                        fos.write(buffer, 0, numBytes);
+                }
+                finally {
+                    fos.close();
+                    zis.close();
+                }
+            }
+
+        }
+        zf.close();
     }
 }

@@ -85,7 +85,7 @@ class TaskHandler implements Runnable {
                 fileL = recvJSON.getLong("length");
                 cmd = recvJSON.getString("cmd");
                 image = recvJSON.getString("image");
-                
+
                 System.out.println("Request Received");
                 dos.writeUTF("accept");
             }
@@ -101,14 +101,17 @@ class TaskHandler implements Runnable {
         try {
             FileOutputStream fos = new FileOutputStream(file);
             BufferedOutputStream bos = new BufferedOutputStream(fos);
-            byte[] fileData = new byte[20000];    
+            byte[] fileData = new byte[20000];
             long size=0;
             int fSize;
             while((fSize=dis.read(fileData))!=-1 && size<fileL ) {
-                bos.write(fileData, 0, fSize);  
+                bos.write(fileData, 0, fSize);
                 size+=fSize;
+                if(size>=fileL) {
+                    break;
+                }
             }
-            bos.flush(); 
+            bos.flush();
             System.out.println("File Received "+file);
         } catch ( Exception e ) {
             e.printStackTrace();
@@ -117,7 +120,7 @@ class TaskHandler implements Runnable {
 
     void unzipFile() throws Exception {
         byte[] buffer = new byte[4096];
-        
+
         File zipFile = new File(file);
         ZipFile zf = new ZipFile(zipFile);
 

@@ -1,14 +1,17 @@
 package com.sp.app.Slave;
 
-import com.spotify.docker.client.*;
 import java.util.*;
 import java.lang.*;
 import java.io.File;
-import com.spotify.docker.client.messages.Image;
-import com.spotify.docker.client.messages.ImageSearchResult;
+
+import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.messages.*;
 import com.spotify.docker.client.messages.ContainerConfig.*;
 import com.spotify.docker.client.DockerClient.*;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
+import com.spotify.docker.client.exceptions.DockerException;
+import com.spotify.docker.client.LogStream;
 
 public class DockerUtil {
     public DefaultDockerClient client;
@@ -46,7 +49,7 @@ public class DockerUtil {
                                                                 .image(image)
                                                                 .cmd("sh","-c","while :; do sleep 5000; done")
                                                                 .build();
-                                                
+
         final ContainerCreation creation = this.client.createContainer(containerConfig);
         return creation.id();
     }
@@ -60,9 +63,9 @@ public class DockerUtil {
 
     public void containerHandler( String image, String cmd ) throws Exception {
         final String id = createContainer( image );
-        final String[] command = {"sh", "-c", "ls /home"};
+        final String[] command = {"sh", "-c", "python /home/test.py"};
         this.client.copyToContainer(new File("data").toPath(), id, "/home/");
-        
+
         this.client.startContainer(id);
         checkContainerCreationState(id);
 

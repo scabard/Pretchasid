@@ -185,6 +185,14 @@ class ListenServer implements Runnable
                 }
                 dosTask.flush();
                 System.out.println("File Sent");
+
+                msg = disTask.readUTF();
+                JSONObject recvJSON = XML.toJSONObject(recv);
+                String msgType = recvJSON.getString("type");
+                if(msgType.equals("output")) {
+                    String execOutput = recvJSON.getString("output");
+                    System.out.println(execOutput);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

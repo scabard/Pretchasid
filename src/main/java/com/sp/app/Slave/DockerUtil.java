@@ -75,11 +75,10 @@ public class DockerUtil {
         final LogStream output = this.client.execStart(execCreation.id());
         final String execOutput = output.readFully();
 
-        System.out.println(execOutput);
-
         this.client.killContainer(id);
         this.client.removeContainer(id);
         this.client.close();
+        return execOutput;
     }
 
 

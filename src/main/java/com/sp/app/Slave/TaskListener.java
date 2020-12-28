@@ -67,7 +67,8 @@ class TaskHandler implements Runnable {
             unzipFile();
             DockerUtil docker = new DockerUtil();
             docker.imgHandler(image);
-            docker.containerHandler(image, cmd);
+            final String execOutput = docker.containerHandler(image, cmd);
+            sendOutput( execOutput );
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -153,5 +154,13 @@ class TaskHandler implements Runnable {
 
         }
         zf.close();
+    }
+
+    void sendOutput( String execOutput ) throws Exception {
+        JSONObject obj = new JSONObject();
+        obj.put("type","output");
+        obj.put("output",execOutput);
+        String opMsg = XML.toString(obj);
+        dos.writeUTF( opMsg );
     }
 }

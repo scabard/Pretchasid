@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import org.json.JSONObject;
 import org.json.XML;
-import org.json.JSONTokener;
+// import org.json.JSONTokener;
 
 public class Client {
     static boolean requested;
@@ -111,6 +111,8 @@ public class Client {
             e.printStackTrace();
             System.exit(0);
         }
+
+        sc.close();
     }
 
     public static synchronized boolean isRequested() {
@@ -147,15 +149,15 @@ class ListenServer implements Runnable
             JSONObject recvJSON = XML.toJSONObject(msg);
             String msgType = recvJSON.getString("type");
             if ( msgType.equals("work") ) {
-                String name = recvJSON.getString("name");
+                // String name = recvJSON.getString("name");
                 String ip = recvJSON.getString("ip");
                 int port = recvJSON.getInt("port");
-                InetAddress ipS = InetAddress.getByName(ip);
+                // InetAddress ipS = InetAddress.getByName(ip);
                 Socket s = new Socket( ip, port );
-                DataInputStream disTask = new DataInputStream(s.getInputStream()); 
-                DataOutputStream dosTask = new DataOutputStream(s.getOutputStream()); 
+                DataInputStream disTask = new DataInputStream(s.getInputStream());
+                DataOutputStream dosTask = new DataOutputStream(s.getOutputStream());
                 TaskInfo task = Client.getTask();
-                
+
                 task.config.put("type","work");
                 task.config.put("file","test.zip");
                 task.config.put("length",task.fileL);
@@ -187,12 +189,14 @@ class ListenServer implements Runnable
                 System.out.println("File Sent");
 
                 msg = disTask.readUTF();
-                JSONObject recvJSON = XML.toJSONObject(recv);
-                String msgType = recvJSON.getString("type");
+                recvJSON = XML.toJSONObject(msg);
+                msgType = recvJSON.getString("type");
                 if(msgType.equals("output")) {
                     String execOutput = recvJSON.getString("output");
                     System.out.println(execOutput);
                 }
+
+                s.close();
             }
         } catch (Exception e) {
             e.printStackTrace();

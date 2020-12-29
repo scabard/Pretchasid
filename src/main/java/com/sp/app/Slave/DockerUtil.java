@@ -61,9 +61,10 @@ public class DockerUtil {
         }
     }
 
-    public void containerHandler( String image, String cmd ) throws Exception {
+    public String containerHandler( String image, String cmd ) throws Exception {
         final String id = createContainer( image );
-        final String[] command = {"sh", "-c", "python /home/test.py"};
+        String comm = "cd home && " + cmd;
+        final String[] command = {"sh", "-c", comm};
         this.client.copyToContainer(new File("data").toPath(), id, "/home/");
 
         this.client.startContainer(id);

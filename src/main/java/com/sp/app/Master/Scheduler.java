@@ -29,12 +29,12 @@ public class Scheduler implements Runnable{
             while (true) {
                 // System.out.println(Master.workQ.size());
                 while (!Util.workqisEmpty() && !Util.slavefisEmpty()) {
-                    String c = Master.workQ.remove();
-                    String s = Master.slaveF.remove();
+                    String c = Util.workqRemove();
+                    String s = Util.slavefRemove();
 
                     ClientInfo client = (ClientInfo)Util.getClient(c);
                     SlaveInfo slave = (SlaveInfo)Util.getSlave(s);
-                    Master.workMap.put(c, s);
+                    Util.workMapPut(c, s);
 
                     System.out.println("Client: " + c + "Slave: " + s);
 

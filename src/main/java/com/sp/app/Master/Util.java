@@ -18,6 +18,10 @@ public class Util {
         return Master.workQ.remove();
     }
 
+    public static synchronized void slavefAdd(String name) {
+        Master.slaveF.add(name);
+    }
+
     public static synchronized boolean slavefisEmpty() {
         return Master.slaveF.isEmpty();
     }
@@ -29,6 +33,11 @@ public class Util {
     public static synchronized int slavefSize() {
         return Master.slaveF.size();
     }
+
+    public static synchronized void workMapPut(String c, String s) {
+        Master.workMap.put(c,s);
+    }
+
     public static synchronized void addWork(String name) {
         Master.workQ.add(name);
         System.out.println("Work added by client " + name);

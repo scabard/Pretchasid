@@ -53,8 +53,19 @@ class SlaveHandler implements Runnable {
 
     public void run() {
         register();
-        while(reg) {
+        String recv;
 
+        try {
+            while(reg) {
+                recv = dis.readUTF();
+
+                if (recv.equals("available")) {
+                    System.out.println("Slave " + name + " available again!");
+                    Util.slavefAdd(name);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

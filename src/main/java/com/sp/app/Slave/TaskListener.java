@@ -69,6 +69,7 @@ class TaskHandler implements Runnable {
             docker.imgHandler(image);
             final String execOutput = docker.containerHandler(image, cmd);
             sendOutput( execOutput );
+            Slave.available();
         }
         catch (Exception e) {
             e.printStackTrace();

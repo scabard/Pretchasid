@@ -1,8 +1,8 @@
 package com.sp.app.Master;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.Socket;
 
 public class ClientInfo {
     public Socket cSock;

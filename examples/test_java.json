@@ -1,0 +1,1 @@
+{"file":"examples/test_java.zip","cmd":"javac Main.java && java Main","image":"openjdk:17-jdk"}

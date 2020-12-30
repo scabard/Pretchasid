@@ -43,6 +43,7 @@ class SlaveHandler implements Runnable {
     DataInputStream dis;
     DataOutputStream dos;
     boolean reg;
+    String[] images;
 
     public SlaveHandler( Socket inpsSock, DataInputStream inpdis, DataOutputStream inpdos ) {
         sSock = inpsSock;
@@ -80,7 +81,9 @@ class SlaveHandler implements Runnable {
                     name = recvJSON.getString("name");
                     String ip = recvJSON.getString("ip");
                     int port = recvJSON.getInt("port");
-                    SlaveInfo sInfo = new SlaveInfo( sSock, name, dis, dos, ip, port );
+                    String imgList = recvJSON.getString("images");
+                    images = imgList.split(" , ");
+                    SlaveInfo sInfo = new SlaveInfo( sSock, name, dis, dos, ip, port, images );
                     Util.addSlave(name, sInfo);
                     reg = true;
                 }

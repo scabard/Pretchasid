@@ -60,7 +60,8 @@ class ClientHandler implements Runnable {
                 JSONObject recvJSON = XML.toJSONObject(msg);
                 String msgType = recvJSON.getString("type");
                 if (msgType.equals("req")) {
-                    Util.addWork(name);
+                    String image = recvJSON.getString("image");
+                    Util.addWork(new WorkInfo(name, image));
                 } else if (msg.equals("exit")) {
                     reg = false;
                     dis.close();

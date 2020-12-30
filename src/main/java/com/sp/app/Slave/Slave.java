@@ -35,6 +35,10 @@ public class Slave {
         msgJSON.put("name",name);
 
         try{
+            DockerUtil docker = new DockerUtil();
+            List<String> imgList = docker.imgTagList();
+            String images = String.join(" , ", imgList);
+
             ip = InetAddress.getByName("localhost");
 
             s = new Socket(ip, serverPort);
@@ -47,6 +51,8 @@ public class Slave {
             sock = new ServerSocket(0);
             currPort = sock.getLocalPort();
             msgJSON.put("port",currPort);
+            
+            msgJSON.put("images",images);
 
             TaskListener tL = new TaskListener(sock);
             Thread th = new Thread(tL);
@@ -67,6 +73,8 @@ public class Slave {
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
+        } catch ( Exception e ) {
+            e.printStackTrace();
         }
     }
 }

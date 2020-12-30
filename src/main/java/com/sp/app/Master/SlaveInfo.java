@@ -12,14 +12,16 @@ public class SlaveInfo {
     public boolean isAvailable;
     public String ip;
     public int port;
+    public String[] images;
 
-    public SlaveInfo ( Socket inpsSock, String inpname, DataInputStream inpdis, DataOutputStream inpdos, String inpip, int inpport ) {
+    public SlaveInfo ( Socket inpsSock, String inpname, DataInputStream inpdis, DataOutputStream inpdos, String inpip, int inpport, String[] inpimages ) {
         sSock = inpsSock;
         name = inpname;
         dis = inpdis;
         dos = inpdos;
         ip = inpip;
         port = inpport;
+        images = inpimages;
         isAvailable = true;
     }
 }

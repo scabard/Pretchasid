@@ -3,6 +3,7 @@ package com.sp.app.Slave;
 import java.util.*;
 import java.lang.*;
 import java.io.File;
+import java.util.stream.Collectors; 
 
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
@@ -82,5 +83,16 @@ public class DockerUtil {
         return execOutput;
     }
 
+    public List<String> imgTagList() throws Exception {
+        List<Image> imgList = this.client.listImages();
+        List<String> tagList = new ArrayList<String>();
+        for(int i=0;i<imgList.size();i++){
+            tagList.addAll(imgList.get(i).repoTags());
+        }
+        return tagList;
+    }
 
+    public void closeClient() {
+        this.client.close();
+    }
 }

@@ -14,7 +14,7 @@ public class Util {
         return Master.workQ.isEmpty();
     }
 
-    public static synchronized String workqRemove() {
+    public static synchronized WorkInfo workqRemove() {
         return Master.workQ.remove();
     }
 
@@ -27,7 +27,11 @@ public class Util {
     }
 
     public static synchronized String slavefRemove() {
-        return Master.slaveF.remove();
+        return Master.slaveF.remove(0);
+    }
+
+    public static synchronized Boolean slavefRemove(String name) {
+        return Master.slaveF.remove(name);
     }
 
     public static synchronized int slavefSize() {
@@ -38,9 +42,9 @@ public class Util {
         Master.workMap.put(c,s);
     }
 
-    public static synchronized void addWork(String name) {
-        Master.workQ.add(name);
-        System.out.println("Work added by client " + name);
+    public static synchronized void addWork(WorkInfo work) {
+        Master.workQ.add(work);
+        System.out.println("Work added by client " + work.name);
     }
 
     public static synchronized void addClient( String name, ClientInfo cInfo ) {
@@ -68,5 +72,15 @@ public class Util {
         } else {
             return null;
         }
+    }
+
+    public static String findImage(String image) {
+        for(String name: Master.slaveF) {
+            SlaveInfo slave = (SlaveInfo)Master.slaveInfo.get(name);
+            if( Arrays.asList(slave.images).contains(image) ) {
+                return name;
+            }
+        }
+        return null;
     }
 }

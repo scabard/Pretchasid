@@ -10,8 +10,8 @@ public class Master {
     public static int sPort = 42069;
     public static HashMap<String, Object> clientInfo;
     public static HashMap<String, Object> slaveInfo;
-    public static Queue<String> workQ;
-    public static Queue<String> slaveF;
+    public static Queue<WorkInfo> workQ;
+    public static LinkedList<String> slaveF;
     public static HashMap<String, String> workMap;
 
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class Master {
         Thread th;
         clientInfo = new HashMap<String, Object>();
         slaveInfo = new HashMap<String, Object>();
-        workQ = new LinkedList<String>();
+        workQ = new LinkedList<WorkInfo>();
         slaveF = new LinkedList<String>();
         workMap = new HashMap<String, String>();
         try {

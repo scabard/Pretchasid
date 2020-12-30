@@ -29,8 +29,19 @@ public class Scheduler implements Runnable{
             while (true) {
                 // System.out.println(Master.workQ.size());
                 while (!Util.workqisEmpty() && !Util.slavefisEmpty()) {
-                    String c = Util.workqRemove();
-                    String s = Util.slavefRemove();
+                    WorkInfo w = Util.workqRemove();
+                    String c = w.name;
+                    String img = w.image;
+
+                    String s = Util.findImage(img);
+                    if(img!=null) {
+                        System.out.println("Image found.");
+                        Util.slavefRemove(s);
+                    }
+                    else {
+                        System.out.println("Image not found.");
+                        s = Util.slavefRemove();
+                    }
 
                     ClientInfo client = (ClientInfo)Util.getClient(c);
                     SlaveInfo slave = (SlaveInfo)Util.getSlave(s);

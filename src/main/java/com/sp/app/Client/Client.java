@@ -76,6 +76,7 @@ public class Client {
                     long fileL = fileP.length();
 
                     obj.put("type","req");
+                    obj.put("image",config.getString("image"));
                     msg = XML.toString(obj);
                     opServer.writeUTF(msg);
 

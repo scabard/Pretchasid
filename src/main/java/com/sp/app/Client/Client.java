@@ -100,6 +100,7 @@ public class Client {
                     opServer.writeUTF(msg);
                     s.close();
                     t.interrupt();
+                    break;
                 } else {
                     System.out.println("Invalid response.");
                 }
@@ -197,6 +198,7 @@ class ListenServer implements Runnable
                     System.out.println(execOutput);
                 }
 
+                Client.request(false);
                 s.close();
             }
         } catch (Exception e) {

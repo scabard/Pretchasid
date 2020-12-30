@@ -2,7 +2,6 @@ package com.sp.app.Master;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -62,12 +61,12 @@ class ClientHandler implements Runnable {
                 if (msgType.equals("req")) {
                     String image = recvJSON.getString("image");
                     Util.addWork(new WorkInfo(name, image));
-                } else if (msg.equals("exit")) {
+                } else if (msgType.equals("exit")) {
                     reg = false;
                     dis.close();
                     cSock.close();
                     cSock.close();
-                    System.out.println("Client " + name + "exiting...");
+                    System.out.println("Client " + name + " exiting...");
                 }
             }
         } catch (Exception e) {

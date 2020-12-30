@@ -1,8 +1,5 @@
 package com.sp.app.Master;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -27,14 +24,13 @@ public class Scheduler implements Runnable{
     public void run() {
         try {
             while (true) {
-                // System.out.println(Master.workQ.size());
                 while (!Util.workqisEmpty() && !Util.slavefisEmpty()) {
                     WorkInfo w = Util.workqRemove();
                     String c = w.name;
                     String img = w.image;
 
                     String s = Util.findImage(img);
-                    if(img!=null) {
+                    if(s!=null) {
                         System.out.println("Image found.");
                         Util.slavefRemove(s);
                     }

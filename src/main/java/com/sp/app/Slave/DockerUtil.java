@@ -1,17 +1,14 @@
 package com.sp.app.Slave;
 
-import java.util.*;
-import java.lang.*;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.io.File;
-import java.util.stream.Collectors; 
+// import java.util.stream.Collectors;
 
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.messages.*;
-import com.spotify.docker.client.messages.ContainerConfig.*;
-import com.spotify.docker.client.DockerClient.*;
-import com.spotify.docker.client.exceptions.DockerCertificateException;
-import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.LogStream;
 
 public class DockerUtil {

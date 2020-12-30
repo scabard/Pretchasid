@@ -1,9 +1,9 @@
 package com.sp.app.Master;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.lang.*;
+import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Master {
     public static int cPort = 42068;
@@ -16,8 +16,8 @@ public class Master {
 
     public static void main(String[] args) {
 
-        int nSlaves = Integer.parseInt(args[0]);
-        InetAddress ip;
+        // int nSlaves = Integer.parseInt(args[0]);
+        // InetAddress ip;
         ServerSocket cSock, sSock;
         Thread th;
         clientInfo = new HashMap<String, Object>();
@@ -66,36 +66,4 @@ public class Master {
             e.printStackTrace();
         }
     }
-
-    // public static synchronized void addWork(String name) {
-    //     workQ.add(name);
-    //     System.out.println("Work added by client " + name);
-    // }
-
-    // public static synchronized void addClient( String name, ClientInfo cInfo ) {
-    //     clientInfo.put(name, cInfo);
-    //     System.out.println("Registered Client " + name);
-    // }
-
-    // public static synchronized void addSlave( String name, SlaveInfo sInfo ) {
-    //     slaveInfo.put(name, sInfo);
-    //     slaveF.add(name);
-    //     System.out.println("Registered Slave " + name);
-    // }
-
-    // public static Object getClient(String name) {
-    //     if (clientInfo.containsKey(name)) {
-    //         return clientInfo.get(name);
-    //     } else {
-    //         return null;
-    //     }
-    // }
-
-    // public static Object getSlave(String name) {
-    //     if (slaveInfo.containsKey(name)) {
-    //         return slaveInfo.get(name);
-    //     } else {
-    //         return null;
-    //     }
-    // }
 }

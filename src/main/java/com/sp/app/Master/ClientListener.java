@@ -1,7 +1,12 @@
 package com.sp.app.Master;
 
-import java.io.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import java.net.Socket;
+import java.net.ServerSocket;
+
 import org.json.JSONObject;
 import org.json.XML;
 

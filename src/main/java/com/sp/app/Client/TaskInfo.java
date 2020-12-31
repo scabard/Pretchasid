@@ -1,6 +1,6 @@
 package com.sp.app.Client;
 
-import java.io.*;
+import java.io.FileInputStream;
 import org.json.JSONObject;
 
 public class TaskInfo {

@@ -1,8 +1,20 @@
 package com.sp.app.Client;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
+import java.net.Socket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import java.util.Scanner;
+
 import org.json.JSONObject;
 import org.json.XML;
 // import org.json.JSONTokener;

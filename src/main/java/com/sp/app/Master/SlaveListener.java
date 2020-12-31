@@ -63,10 +63,18 @@ class SlaveHandler implements Runnable {
         try {
             while(reg) {
                 recv = dis.readUTF();
+                JSONObject recvJSON = XML.toJSONObject(recv);
+                String msgType = recvJSON.getString("type");
 
-                if (recv.equals("available")) {
+                if (msgType.equals("available")) {
                     System.out.println("Slave " + name + " available again!");
                     Util.slavefAdd(name);
+                } else if (msgType.equals("exit")) {
+                    reg = false;
+                    dis.close();
+                    sSock.close();
+                    sSock.close();
+                    System.out.println("Slave " + name + " exiting...");
                 }
             }
         } catch (IOException e) {
@@ -87,9 +95,24 @@ class SlaveHandler implements Runnable {
                     int port = recvJSON.getInt("port");
                     String imgList = recvJSON.getString("images");
                     images = imgList.split(" , ");
-                    SlaveInfo sInfo = new SlaveInfo( sSock, name, dis, dos, ip, port, images );
-                    Util.addSlave(name, sInfo);
-                    reg = true;
+                    if ( Util.checkSlaveNames(name) ) {
+                        JSONObject msgJSON = new JSONObject();
+                        msgJSON.put("type","regfail");
+                        msgJSON.put("msg","Name already taken");
+                        String msg = XML.toString(msgJSON);
+                        dos.writeUTF(msg);
+                        break;
+                    }
+                    else {
+                        JSONObject msgJSON = new JSONObject();
+                        msgJSON.put("type","regsuccess");
+                        String msg = XML.toString(msgJSON);
+                        dos.writeUTF(msg);
+
+                        SlaveInfo sInfo = new SlaveInfo( sSock, name, dis, dos, ip, port, images );
+                        Util.addSlave(name, sInfo);
+                        reg = true;
+                    }
                 }
             }
         } catch ( IOException e ) {

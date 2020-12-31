@@ -80,4 +80,12 @@ public class Util {
         }
         return null;
     }
+
+    public static boolean checkSlaveNames( String name ) {
+        return Master.slaveInfo.containsKey(name);
+    }
+
+    public static boolean checkClientNames( String name ) {
+        return Master.clientInfo.containsKey(name);
+    }
 }

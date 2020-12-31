@@ -20,14 +20,18 @@ import org.apache.commons.compress.archivers.zip.ZipFile;
 
 public class TaskListener implements Runnable {
     ServerSocket sock;
+    Thread taskT;
 
     public TaskListener( ServerSocket inpsock ) {
         sock = inpsock;
     }
 
+    public void killTaskHandler() {
+        taskT.interrupt();
+    }
+
     public void run() {
         Socket s;
-        Thread taskT;
         TaskHandler taskH;
         DataInputStream dis;
         DataOutputStream dos;

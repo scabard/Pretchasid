@@ -25,13 +25,6 @@ public class Client {
             System.exit(0);
         }
 
-        System.out.print("Enter name: ");
-        String name = sc.nextLine();
-        JSONObject msgJSON = new JSONObject();
-        msgJSON.put("ty","r");
-        msgJSON.put("name",name);
-        msg = XML.toString(msgJSON);
-
         try {
             ip = InetAddress.getByName("localhost");
 
@@ -40,7 +33,28 @@ public class Client {
             ipServer = new DataInputStream(s.getInputStream());
             opServer = new DataOutputStream(s.getOutputStream());
 
-            opServer.writeUTF(msg);
+            boolean reg = false;
+            do {
+                System.out.print("Enter name: ");
+                String name = sc.nextLine();
+                JSONObject msgJSON = new JSONObject();
+                msgJSON.put("ty","r");
+                msgJSON.put("name",name);
+                msg = XML.toString(msgJSON);
+
+                opServer.writeUTF(msg);
+
+                msg = ipServer.readUTF();
+                msgJSON = XML.toJSONObject(msg);
+                String msgType = msgJSON.getString("type");
+                if(msgType.equals("regfail")) {
+                    System.out.println(msgJSON.getString("msg"));
+                } else if(msgType.equals("regsuccess")) {
+                    
+                    System.out.println("Registration Successful");
+                    reg = true;
+                }
+            } while(reg==false);
 
             ListenServer l = new ListenServer(ipServer);
             Thread t = new Thread(l);

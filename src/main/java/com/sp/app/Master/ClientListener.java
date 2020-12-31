@@ -84,9 +84,23 @@ class ClientHandler implements Runnable {
                 String msgType = recvJSON.getString("ty");
                 if(msgType.equals("r")) {
                     name = recvJSON.getString("name");
-                    ClientInfo cInfo = new ClientInfo( cSock, name, dis, dos );
-                    Util.addClient(name, cInfo);
-                    reg = true;
+                    if ( Util.checkClientNames(name) ) {
+                        JSONObject msgJSON = new JSONObject();
+                        msgJSON.put("type","regfail");
+                        msgJSON.put("msg","Name already taken");
+                        String msg = XML.toString(msgJSON);
+                        dos.writeUTF(msg);
+                    }
+                    else {
+                        JSONObject msgJSON = new JSONObject();
+                        msgJSON.put("type","regsuccess");
+                        String msg = XML.toString(msgJSON);
+                        dos.writeUTF(msg);
+
+                        ClientInfo cInfo = new ClientInfo( cSock, name, dis, dos );
+                        Util.addClient(name, cInfo);
+                        reg = true;
+                    }
                 }
             }
         } catch ( IOException e ) {

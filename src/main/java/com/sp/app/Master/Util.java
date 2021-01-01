@@ -85,7 +85,17 @@ public class Util {
         return Master.slaveInfo.containsKey(name);
     }
 
+    public static void removeSlave(String name) {
+        Master.slaveInfo.remove(name);
+    }
+
     public static boolean checkClientNames( String name ) {
         return Master.clientInfo.containsKey(name);
+    }
+
+    public static void removeClient(String name) {
+        Master.workQ.remove(getClient(name));
+        Master.clientInfo.remove(name);
+        Master.workMap.remove(name);
     }
 }

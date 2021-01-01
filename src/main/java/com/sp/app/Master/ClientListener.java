@@ -71,6 +71,7 @@ class ClientHandler implements Runnable {
                     dis.close();
                     cSock.close();
                     cSock.close();
+                    Util.removeClient(name);
                     System.out.println("Client " + name + " exiting...");
                 }
             }

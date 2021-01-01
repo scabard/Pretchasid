@@ -56,7 +56,7 @@ public class Slave {
             sock = new ServerSocket(0);
             currPort = sock.getLocalPort();
             msgJSON.put("port",currPort);
-            
+
             msgJSON.put("images",images);
 
             msg = XML.toString(msgJSON);
@@ -69,14 +69,14 @@ public class Slave {
                 System.out.println(msgJSON.getString("msg"));
                 System.exit(0);
             } else if(msgType.equals("regsuccess")) {
-                
+
                 System.out.println("Registration Successful");
             }
 
             TaskListener tL = new TaskListener(sock);
             Thread th = new Thread(tL);
             th.start();
-            
+
             Thread task = new Thread(new ListenServer(opServer, ipServer));
             task.start();
 
@@ -93,12 +93,14 @@ public class Slave {
                     task.interrupt();
                     s.close();
                     sock.close();
+                    sc.close();
                     break;
                 } else {
                     System.out.println("Invalid response.");
                 }
             }
-        
+
+        sc.close();
         System.exit(0);
         } catch( UnknownHostException e ){
             e.printStackTrace();

@@ -74,6 +74,7 @@ class SlaveHandler implements Runnable {
                     dis.close();
                     sSock.close();
                     sSock.close();
+                    Util.removeSlave(name);
                     System.out.println("Slave " + name + " exiting...");
                 }
             }

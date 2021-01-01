@@ -62,7 +62,7 @@ public class Client {
                 if(msgType.equals("regfail")) {
                     System.out.println(msgJSON.getString("msg"));
                 } else if(msgType.equals("regsuccess")) {
-                    
+
                     System.out.println("Registration Successful");
                     reg = true;
                 }
@@ -126,6 +126,7 @@ public class Client {
                     opServer.writeUTF(msg);
                     s.close();
                     t.interrupt();
+                    l.stop();
                     break;
                 } else {
                     System.out.println("Invalid response.");
@@ -162,6 +163,7 @@ public class Client {
 
 class ListenServer implements Runnable
 {
+    Socket s;
     DataInputStream ipServer;
     String msg;
 
@@ -170,6 +172,13 @@ class ListenServer implements Runnable
         ipServer = ipS;
     }
 
+    public void stop() {
+        try {
+            s.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void run()
     {
         try {
@@ -181,7 +190,7 @@ class ListenServer implements Runnable
                 String ip = recvJSON.getString("ip");
                 int port = recvJSON.getInt("port");
                 // InetAddress ipS = InetAddress.getByName(ip);
-                Socket s = new Socket( ip, port );
+                s = new Socket( ip, port );
                 DataInputStream disTask = new DataInputStream(s.getInputStream());
                 DataOutputStream dosTask = new DataOutputStream(s.getOutputStream());
                 TaskInfo task = Client.getTask();

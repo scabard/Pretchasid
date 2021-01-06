@@ -17,7 +17,6 @@ import java.util.Scanner;
 
 import org.json.JSONObject;
 import org.json.XML;
-// import org.json.JSONTokener;
 
 public class Client {
     static boolean requested;
@@ -189,6 +188,7 @@ class ListenServer implements Runnable
                 // String name = recvJSON.getString("name");
                 String ip = recvJSON.getString("ip");
                 int port = recvJSON.getInt("port");
+                String key = recvJSON.getString("key");
                 // InetAddress ipS = InetAddress.getByName(ip);
                 s = new Socket( ip, port );
                 DataInputStream disTask = new DataInputStream(s.getInputStream());
@@ -198,6 +198,7 @@ class ListenServer implements Runnable
                 task.config.put("type","work");
                 task.config.put("file","test.zip");
                 task.config.put("length",task.fileL);
+                task.config.put("key",key);
                 String msgS = XML.toString(task.config);
                 dosTask.writeUTF(msgS);
 

@@ -83,11 +83,11 @@ class TaskHandler implements Runnable {
             docker.imgHandler(image);
             final String execOutput = docker.containerHandler(image, cmd);
             sendOutput( execOutput );
-            Slave.available();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+        Slave.available();
     }
 
     void config() {
@@ -101,15 +101,24 @@ class TaskHandler implements Runnable {
                 fileL = recvJSON.getLong("length");
                 cmd = recvJSON.getString("cmd");
                 image = recvJSON.getString("image");
-
+                String key = recvJSON.getString("key");
                 System.out.println("Request Received");
-                dos.writeUTF("accept");
+                if( key.equals(Slave.getKey()) ) {
+                    System.out.println("Key Accepted");
+                    dos.writeUTF("accept");
+                } else {
+                    dos.writeUTF("fail");
+                    System.exit(0);
+                }
+
             }
             else {
                 dos.writeUTF("fail");
+                System.exit(0);
             }
         } catch ( IOException e ) {
             e.printStackTrace();
+            System.exit(0);
         }
     }
 

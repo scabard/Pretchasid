@@ -12,7 +12,7 @@ public class Master {
     public static HashMap<String, Object> slaveInfo;
     public static Queue<WorkInfo> workQ;
     public static LinkedList<String> slaveF;
-    public static HashMap<String, String> workMap;
+    public static HashMap<String, Object> workMap;
 
     public static void main(String[] args) {
 
@@ -24,7 +24,7 @@ public class Master {
         slaveInfo = new HashMap<String, Object>();
         workQ = new LinkedList<WorkInfo>();
         slaveF = new LinkedList<String>();
-        workMap = new HashMap<String, String>();
+        workMap = new HashMap<String, Object>();
         try {
             cSock = new ServerSocket(cPort);
             // cPort = cSock.getLocalPort();

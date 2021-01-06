@@ -9,7 +9,7 @@ public class SlaveInfo {
     public String name;
     public DataInputStream dis;
     public DataOutputStream dos;
-    public boolean isAvailable;
+    public boolean acceptKey;
     public String ip;
     public int port;
     public String[] images;
@@ -22,6 +22,6 @@ public class SlaveInfo {
         ip = inpip;
         port = inpport;
         images = inpimages;
-        isAvailable = true;
+        acceptKey = false;
     }
 }

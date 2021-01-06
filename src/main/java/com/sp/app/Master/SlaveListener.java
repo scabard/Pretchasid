@@ -68,6 +68,7 @@ class SlaveHandler implements Runnable {
 
                 if (msgType.equals("available")) {
                     System.out.println("Slave " + name + " available again!");
+                    Util.setSlaveAcceptKey( name, false);
                     Util.slavefAdd(name);
                 } else if (msgType.equals("exit")) {
                     reg = false;
@@ -76,6 +77,8 @@ class SlaveHandler implements Runnable {
                     sSock.close();
                     Util.removeSlave(name);
                     System.out.println("Slave " + name + " exiting...");
+                } else if (msgType.equals("accept")) {
+                    Util.setSlaveAcceptKey( name, true);
                 }
             }
         } catch (IOException e) {

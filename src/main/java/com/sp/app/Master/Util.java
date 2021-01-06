@@ -1,6 +1,8 @@
 package com.sp.app.Master;
 
 import java.util.Arrays;
+import java.lang.StringBuilder;
+import java.lang.Math;
 
 public class Util {
     public static synchronized int workqSize() {
@@ -35,8 +37,8 @@ public class Util {
         return Master.slaveF.size();
     }
 
-    public static synchronized void workMapPut(String c, String s) {
-        Master.workMap.put(c,s);
+    public static synchronized void workMapPut(String key, WorkMapInfo work) {
+        Master.workMap.put(key,work);
     }
 
     public static synchronized void addWork(WorkInfo work) {
@@ -53,6 +55,19 @@ public class Util {
         Master.slaveInfo.put(name, sInfo);
         Master.slaveF.add(name);
         System.out.println("Registered Slave " + name);
+    }
+
+    public static synchronized void setSlaveAcceptKey( String name, boolean status ) {
+        if (Master.slaveInfo.containsKey(name)) {
+            ((SlaveInfo)Master.slaveInfo.get(name)).acceptKey = status;
+        }
+    }
+
+    public static synchronized boolean getSlaveAcceptKey( String name ) {
+        if (Master.slaveInfo.containsKey(name)) {
+            return ((SlaveInfo)Master.slaveInfo.get(name)).acceptKey;
+        }
+        return false;
     }
 
     public static Object getClient(String name) {
@@ -97,5 +112,21 @@ public class Util {
         Master.workQ.remove(getClient(name));
         Master.clientInfo.remove(name);
         Master.workMap.remove(name);
+    }
+
+    public static boolean checkWorkMap( String key ) {
+        return Master.clientInfo.containsKey(key);
+    }
+
+    public static String getRandString(int n) 
+    {
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                    + "abcdefghijklmnopqrstuvxyz"; 
+        StringBuilder sb = new StringBuilder(n); 
+        for (int i = 0; i < n; i++) { 
+            int index = (int)(AlphaNumericString.length() * Math.random()); 
+            sb.append(AlphaNumericString.charAt(index)); 
+        }
+        return sb.toString(); 
     }
 }

@@ -11,6 +11,8 @@ public class Slave {
     static int currPort;
     static DataInputStream disServer;
     static DataOutputStream dosServer;
+    static String key;
+    static long time;
 
     public static void available() {
         try {
@@ -112,6 +114,22 @@ public class Slave {
             e.printStackTrace();
         }
     }
+
+    public static synchronized void setKey( String inpkey ) {
+        key = inpkey;
+    }
+
+    public static synchronized void setTime( Long inptime ) {
+        time = inptime;
+    }
+
+    public static synchronized String getKey() {
+        return key;
+    }
+
+    public static synchronized Long getTime() {
+        return time;
+    }
 }
 
 class ListenServer implements Runnable
@@ -129,9 +147,23 @@ class ListenServer implements Runnable
     {
         try {
             String msg;
+            JSONObject msgJSON = new JSONObject();
+            String msgType;
             while(true) {
                 msg = ipServer.readUTF();
-                System.out.println(msg);
+                msgJSON = XML.toJSONObject(msg);
+                msgType = msgJSON.getString("type");
+                if(msgType.equals("work")) {
+                    String key = msgJSON.getString("key");
+                    Long time = msgJSON.getLong("time");
+
+                    Slave.setKey(key);
+                    Slave.setTime(time);
+                    msgJSON = new JSONObject();
+                    msgJSON.put("type","accept");
+                    msg = XML.toString(msgJSON);
+                    opServer.writeUTF(msg);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
